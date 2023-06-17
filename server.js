@@ -1,16 +1,21 @@
+
 const express = require('express');
-const path = require('path');
+
+const index = require('./routes/index-routes.js');
+const notes = require('./routes/notes-routes.js');
+
+const PORT = process.env.PORT||3001;
 
 const app = express();
-const PORT = 3001;
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use("/public", express.static(__dirname + "/public"));
 
-require("./routes/html-routes")(app);
-require("./routes/api-routes")(app);
+app.use('/', index);
+app.use('/', notes);
 
-app.listen(PORT, function() {
-    console.log("App listening on PORT " + PORT);
-});
+app.use(express.static('public'));
+
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT} 🚀`)
+);
